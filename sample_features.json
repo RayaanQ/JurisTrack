@@ -1,0 +1,76 @@
+{
+  "sample_features": [
+    {
+      "title": "Curfew Mode for Teen Users",
+      "description": "Automatically logs out users under 18 between 10pm and 6am based on their registered age and device location. Includes parent override functionality and educational messaging about healthy digital habits.",
+      "prd": "The Curfew Mode feature shall implement time-based restrictions for minor users. System requirements: 1) Age verification at signup 2) Parental consent collection 3) Time-based access controls 4) Location-aware enforcement 5) Emergency override capabilities. This feature addresses regulatory requirements in Utah and other jurisdictions implementing social media restrictions for minors.",
+      "trd": "Technical implementation: Utilize Spanner database for user age storage, Glow algorithm modifications to respect curfew settings, Jellybean integration for compliance monitoring. System will check user birthdate against current time daily at 9:55pm. Location services integration required for timezone-aware enforcement."
+    },
+    {
+      "title": "Enhanced Personalization Engine",
+      "description": "Advanced machine learning system that analyzes user behavior, viewing history, and engagement patterns to deliver highly personalized content recommendations. Includes cross-device tracking and interest profiling.",
+      "prd": "Personalization Engine v2.0 objectives: Increase user engagement by 25% through improved content matching. Features include: behavioral analytics, viewing pattern analysis, cross-device user fingerprinting, demographic profiling, and real-time recommendation updates. Must comply with data protection regulations in EU and California markets.",
+      "trd": "Architecture: Prism analytics platform integration, Atlas geographic routing for personalized content delivery. Requires PII collection, device fingerprinting, cross-border data transfers to US servers. Implement GDPR consent flows and CCPA opt-out mechanisms. Machine learning models will process user interaction data in real-time."
+    },
+    {
+      "title": "Parental Dashboard Suite",
+      "description": "Comprehensive toolkit allowing parents to monitor and control their minor children's TikTok usage. Includes screen time limits, content filtering, friend request approvals, and usage reports.",
+      "prd": "Parental Controls Dashboard requirements: 1) Account linking between parent and child 2) Real-time usage monitoring 3) Content filter customization 4) Screen time enforcement 5) Weekly activity reports 6) Emergency contact features. Must meet COPPA requirements for parental consent and control.",
+      "trd": "Implementation using Libra safety framework and Compass content policy engine. Parent authentication via separate verification system. Child account modifications require parental approval workflow. Data retention policies for minor user analytics must align with jurisdiction-specific requirements."
+    },
+    {
+      "title": "CSAM Detection System",
+      "description": "Automated content scanning system to detect and report child sexual abuse material using machine learning and hash matching. Integrates with NCMEC reporting requirements and law enforcement cooperation protocols.",
+      "prd": "Child Safety Detection System v3.0: Deploy advanced ML models for CSAM identification with <99.9% accuracy. Requirements: automated scanning of all uploaded content, hash database integration, immediate removal and preservation protocols, law enforcement notification workflows, user account suspension procedures.",
+      "trd": "Technical stack: Quantum real-time processing engine for content analysis, integration with NCMEC hash database, automated reporting API, content preservation system for law enforcement access. Requires compliance with federal reporting mandates and cross-jurisdictional law enforcement cooperation protocols."
+    },
+    {
+      "title": "Political Content Moderation",
+      "description": "Specialized content moderation system for political speech and election-related content. Includes fact-checking integration, political ad labeling, and candidate verification processes.",
+      "prd": "Political Content Framework: Implement consistent moderation standards for political speech while respecting jurisdictional differences. Features: candidate verification system, political ad transparency, election misinformation detection, consistent enforcement logging. Must navigate Florida's social media law restrictions on political deplatforming.",
+      "trd": "Architecture leverages Jellybean moderation pipeline with political content classification module. Compass policy engine updated with jurisdiction-specific political speech rules. Special handling for verified political figures and election periods."
+    },
+    {
+      "title": "Cross-Border Data Transfer System",
+      "description": "Infrastructure for managing user data transfers between global data centers while maintaining compliance with data localization laws and privacy regulations.",
+      "prd": "Global Data Infrastructure 2.0: Ensure compliant data flows while maintaining service performance. Requirements: EU-US data adequacy mechanisms, GDPR Article 44-49 compliance, CCPA cross-border transfer disclosures, data minimization protocols, user consent management for international transfers.",
+      "trd": "Implementation using Atlas geographic routing with enhanced compliance controls. Data classification system for PII vs non-PII routing. Automated consent checking before cross-border transfers. Integration with legal basis validation systems."
+    },
+    {
+      "title": "Age Verification Gateway",
+      "description": "Robust age verification system using multiple verification methods including ID scanning, facial age estimation, and third-party verification services to ensure accurate user age detection.",
+      "prd": "Age Verification System v2.0: Multi-modal age verification with 95%+ accuracy. Features: government ID scanning, biometric age estimation, third-party verification integration, appeal processes for verification failures, privacy-preserving verification storage.",
+      "trd": "Technical implementation: ID document OCR and validation, facial analysis SDK integration, encrypted verification data storage, audit trail generation. Must support various international ID formats and comply with biometric data regulations."
+    },
+    {
+      "title": "Algorithmic Transparency Dashboard",
+      "description": "User-facing dashboard explaining how the recommendation algorithm works, what data influences content suggestions, and providing controls for algorithm customization.",
+      "prd": "Algorithm Transparency Initiative: Provide users with visibility into recommendation systems per EU DSA requirements. Features: personalized explanation of content ranking factors, data usage transparency, algorithm customization controls, recommendation audit logs for users.",
+      "trd": "Integration with Glow recommendation engine to extract explainable features. User-friendly visualization of algorithmic decision factors. Real-time explanation generation for content recommendations."
+    },
+    {
+      "title": "Content Creator Monetization Hub",
+      "description": "Comprehensive platform for content creators to monetize their content through various revenue streams including brand partnerships, tipping, and advertising revenue sharing.",
+      "prd": "Creator Economy Platform v3.0: Enable diverse monetization options while ensuring tax compliance and creator protection. Features: brand partnership marketplace, virtual gifting system, ad revenue sharing, tax reporting automation, creator fund distribution.",
+      "trd": "Financial transaction processing via secure payment APIs, tax jurisdiction detection and reporting, creator verification and onboarding workflows. Integration with brand safety systems and content quality scoring."
+    },
+    {
+      "title": "Basic Video Upload Service",
+      "description": "Standard video upload functionality with format conversion, quality optimization, and basic metadata extraction. Core infrastructure feature with no special compliance requirements.",
+      "prd": "Video Upload Service v1.5: Reliable, fast video processing pipeline. Features: multi-format support, automatic quality optimization, thumbnail generation, basic content scanning for technical issues, upload progress tracking.",
+      "trd": "Standard video processing pipeline using established codecs and conversion libraries. No special compliance features required - basic content safety scanning only."
+    },
+    {
+      "title": "Real-Time Chat Messaging",
+      "description": "Direct messaging system between users with support for text, images, and voice messages. Includes basic safety features and spam detection.",
+      "prd": "Messaging System v2.0: Secure, reliable communication platform. Features: end-to-end encryption option, message filtering, spam detection, user blocking capabilities, message retention controls.",
+      "trd": "WebSocket-based real-time messaging with message queuing for offline users. Standard content moderation integration, user privacy controls, basic data retention policies."
+    },
+    {
+      "title": "Location-Based Content Discovery",
+      "description": "Feature allowing users to discover content based on their geographic location, including local trends, nearby events, and geo-tagged content from their area.",
+      "prd": "Geo-Discovery Engine: Connect users with location-relevant content while respecting privacy preferences. Features: location-based trending topics, nearby user content, local event integration, privacy-first location handling.",
+      "trd": "GPS and network-based location detection with user consent workflows. Location data anonymization and aggregation protocols. Integration with local content filtering requirements."
+    }
+  ]
+}
