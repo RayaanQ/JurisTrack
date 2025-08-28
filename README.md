@@ -24,15 +24,12 @@ An intelligent system that analyzes social platform features for geo-specific re
 
 * **LLM Integration (GEMINI)** – Provides intelligent reasoning with fallback to rule-based analysis
 * **Explainable AI** – Each decision is linked to explicit text snippets or regulation clauses
-* **TF-IDF Regulation Search** – Fast semantic matching against 8 major regulations:
+* **TF-IDF Regulation Search** – Fast semantic matching against 5 major regulations:
 
   * EU DSA
-  * GDPR
   * CCPA
   * Utah Social Media Act
   * Florida Law
-  * COPPA
-  * UK Age Appropriate Design
   * NCMEC
 * **Multi-Factor Risk Scoring**
 
@@ -153,7 +150,7 @@ npm start
 
 | Feature                  | Compliance | Risk Score | Regions            | Regulations                                             |
 | ------------------------ | ---------- | ---------- | ------------------ | ------------------------------------------------------- |
-| Curfew Mode              | ✅ Yes      | 85         | Utah, US; UK       | Utah Social Media Act, COPPA, UK Age Appropriate Design |
+| Curfew Mode              | ✅ Yes      | 85         | Utah, US           | Utah Social Media Act, COPPA                            |
 | Enhanced Personalization | ✅ Yes      | 65         | EU; California, US | GDPR, CCPA                                              |
 | Basic Video Upload       | ❌ No       | 15         | –                  | –                                                       |
 
