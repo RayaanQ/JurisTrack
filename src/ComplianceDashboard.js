@@ -322,7 +322,7 @@ const ComplianceDashboard = () => {
 
           {/* Recent Analyses */}
           <div className="bg-gray-800 p-6 rounded-xl border border-gray-700">
-            <h3 className="text-xl font-semibold mb-4">Recent Analyses</h3>
+            <h3 className="text-xl font-semibold mb-4">Recent Analysis</h3>
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>

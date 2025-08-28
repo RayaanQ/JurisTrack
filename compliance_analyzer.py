@@ -134,7 +134,7 @@ class ComplianceAnalyzer:
             1. Does it require geo-specific compliance logic? (Yes/No)
             2. Why? (2-3 sentences)
             3. Which specific regulatory obligations might apply?
-            4. What regions are most likely affected?
+            4. What regions are most likely affected?**Only select from the following jurisdictions: {relevant_regulations}**
 
             Respond in JSON format:
             {{
@@ -145,17 +145,27 @@ class ComplianceAnalyzer:
                 "confidence": 0-100
             }}
             """
-            
+            result = None
             if self.client:
                 response = self.client.generate_content(prompt)
+                # ✅ Gemini: extract text safely
+                raw_text = ""
                 try:
-                    result = json.loads(response.text)  # Gemini responses are under `.text`
-                except json.JSONDecodeError:
-                    logger.warning("Gemini returned invalid JSON, falling back.")
-                    result = self._fallback_compliance_analysis(text, relevant_regulations)
-            else:
-                # Fallback analysis without API
+                    raw_text = response.candidates[0].content[0].text
+                except Exception:
+                     raw_text = getattr(response, "text", "")
+                import re, json
+                match = re.search(r"\{.*\}", raw_text, re.DOTALL)
+                if match:
+                    try:
+                        result = json.loads(match.group())
+                    except json.JSONDecodeError:
+                        logger.warning("Failed to parse JSON from Gemini output")
+                        result = self._fallback_compliance_analysis(text, relevant_regulations)
+                    
+            if not result:
                 result = self._fallback_compliance_analysis(text, relevant_regulations)
+
             
             return result
             

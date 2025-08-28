@@ -6,6 +6,8 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import pickle
 import os
+import requests
+from bs4 import BeautifulSoup
 
 logger = logging.getLogger(__name__)
 
@@ -32,19 +34,31 @@ class RegulationKnowledgeBase:
             logger.error(f"Failed to build knowledge base: {str(e)}")
             raise
     
-    def _load_regulation_data(self) -> List[Dict]:
-        """Load regulation data (hardcoded for prototype)"""
-        regulations = [
-            {
+    def fetch_dsa_from_eurlex(self) -> Dict:
+        """
+        Fetch EU Digital Services Act (DSA) from EUR-Lex API (demo).
+        Falls back to static content if request fails.
+        """
+        url = "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32022R2065"
+        try:
+            response = requests.get(url, timeout=10)
+            if response.status_code != 200:
+                raise Exception(f"HTTP {response.status_code}")
+            
+            soup = BeautifulSoup(response.text, "html.parser")
+            title = soup.find("h1").text.strip() if soup.find("h1") else "EU Digital Services Act (DSA)"
+            paragraphs = [p.text.strip() for p in soup.find_all("p")[:5]]
+            
+            return {
                 'id': 'eu_dsa_2022',
-                'name': 'EU Digital Services Act (DSA)',
+                'name': title,
                 'jurisdiction': 'European Union',
-                'description': 'Regulation on digital services, content moderation, and platform accountability. Requires risk assessment for large platforms and transparency in content moderation.',
+                'description': " ".join(paragraphs),
                 'key_obligations': [
                     'Content moderation transparency reports',
                     'Risk assessment for systemic risks',
-                    'User notification of content decisions',
-                    'Appeals process for content moderation',
+                    'User notification of content moderation decisions',
+                    'Appeals process for users',
                     'Age-appropriate design for minors'
                 ],
                 'scope': [
@@ -52,165 +66,131 @@ class RegulationKnowledgeBase:
                     'recommendation systems',
                     'user safety',
                     'algorithmic transparency',
-                    'harmful content removal'
+                    'child protection'
                 ],
                 'penalties': 'Up to 6% of global annual turnover',
                 'effective_date': '2024-02-17'
-            },
-            {
-                'id': 'ca_ccpa_2020',
-                'name': 'California Consumer Privacy Act (CCPA)',
-                'jurisdiction': 'California, US',
-                'description': 'Privacy law giving California residents rights over their personal information including right to know, delete, and opt-out of sale.',
+            }
+        except Exception as e:
+            logger.warning(f"Failed to fetch live DSA from EUR-Lex: {e}. Using static fallback.")
+            return {
+                'id': 'eu_dsa_2022',
+                'name': 'EU Digital Services Act (DSA)',
+                'jurisdiction': 'European Union',
+                'description': 'Regulation governing online platforms, requiring transparency, risk assessment, and user protection, with special focus on minors and algorithmic accountability.',
                 'key_obligations': [
-                    'Privacy policy disclosures',
-                    'Right to know data collection',
-                    'Right to delete personal information',
-                    'Right to opt-out of data sale',
-                    'Non-discrimination for privacy rights exercise'
-                ],
-                'scope': [
-                    'personal data collection',
-                    'data sharing',
-                    'user profiling',
-                    'targeted advertising',
-                    'data analytics'
-                ],
-                'penalties': 'Up to $7,500 per violation',
-                'effective_date': '2020-01-01'
-            },
-            {
-                'id': 'fl_social_media_2021',
-                'name': 'Florida Social Media Law',
-                'jurisdiction': 'Florida, US',
-                'description': 'Law restricting social media platforms from deplatforming political candidates and requiring disclosure of content moderation practices.',
-                'key_obligations': [
-                    'Cannot deplatform political candidates',
-                    'Content moderation standards disclosure',
-                    'Consistent application of community standards',
-                    'User notification of content actions'
+                    'Content moderation transparency reports',
+                    'Risk assessment for systemic risks',
+                    'User notification of content moderation decisions',
+                    'Appeals process for users',
+                    'Age-appropriate design for minors'
                 ],
                 'scope': [
                     'content moderation',
-                    'political content',
-                    'deplatforming',
-                    'community standards'
+                    'recommendation systems',
+                    'user safety',
+                    'algorithmic transparency',
+                    'child protection'
                 ],
-                'penalties': 'Up to $250,000 per day for candidates',
-                'effective_date': '2021-07-01'
-            },
-            {
-                'id': 'ut_social_media_2023',
-                'name': 'Utah Social Media Regulation Act',
-                'jurisdiction': 'Utah, US',
-                'description': 'Law requiring age verification and parental consent for minors, restricting certain features for youth users.',
-                'key_obligations': [
-                    'Age verification for users under 18',
-                    'Parental consent for minor accounts',
-                    'Curfew features (10pm-6am restriction)',
-                    'Prohibit certain addictive features for minors',
-                    'Default privacy settings for minors'
-                ],
-                'scope': [
-                    'age verification',
-                    'minors protection',
-                    'parental controls',
-                    'curfew enforcement',
-                    'addictive design features'
-                ],
-                'penalties': 'Civil penalties up to $5,000 per violation',
-                'effective_date': '2024-03-01'
-            },
-            {
-                'id': 'us_coppa_1998',
-                'name': 'Children\'s Online Privacy Protection Act (COPPA)',
-                'jurisdiction': 'United States',
-                'description': 'Federal law protecting privacy of children under 13, requiring parental consent for data collection.',
-                'key_obligations': [
-                    'Parental consent for data collection under 13',
-                    'Privacy notice for parents',
-                    'Limited collection and use of children\'s data',
-                    'No behavioral advertising to children',
-                    'Data deletion upon parent request'
-                ],
-                'scope': [
-                    'children under 13',
-                    'parental consent',
-                    'data collection',
-                    'behavioral advertising',
-                    'age-appropriate features'
-                ],
-                'penalties': 'Up to $43,792 per violation',
-                'effective_date': '2000-04-21'
-            },
-            {
-                'id': 'us_ncmec_reporting',
-                'name': 'NCMEC Reporting Requirements',
-                'jurisdiction': 'United States',
-                'description': 'Federal law requiring electronic service providers to report child sexual abuse material (CSAM) to NCMEC.',
-                'key_obligations': [
-                    'Report known CSAM to NCMEC',
-                    'Preserve reported content',
-                    'Provide technical assistance to law enforcement',
-                    'Maintain reporting procedures'
-                ],
-                'scope': [
-                    'child safety',
-                    'content scanning',
-                    'csam detection',
-                    'law enforcement cooperation',
-                    'content preservation'
-                ],
-                'penalties': 'Criminal penalties and civil liability',
-                'effective_date': '1998-10-30'
-            },
-            {
-                'id': 'uk_age_appropriate_design',
-                'name': 'UK Age Appropriate Design Code',
-                'jurisdiction': 'United Kingdom',
-                'description': 'Code requiring age-appropriate design for services likely to be accessed by children.',
-                'key_obligations': [
-                    'Age-appropriate design by default',
-                    'Data protection impact assessments',
-                    'High privacy settings by default for children',
-                    'Minimize data collection from children',
-                    'No profiling or automated decision-making for children'
-                ],
-                'scope': [
-                    'age-appropriate design',
-                    'children\'s privacy',
-                    'default settings',
-                    'profiling restrictions',
-                    'data minimization'
-                ],
-                'penalties': 'Up to 4% of global annual turnover',
-                'effective_date': '2021-09-02'
-            },
-            {
-                'id': 'gdpr_2018',
-                'name': 'General Data Protection Regulation (GDPR)',
-                'jurisdiction': 'European Union',
-                'description': 'Comprehensive data protection regulation governing processing of personal data of EU residents.',
-                'key_obligations': [
-                    'Lawful basis for processing',
-                    'Data subject consent',
-                    'Right to be forgotten',
-                    'Data portability',
-                    'Privacy by design and default'
-                ],
-                'scope': [
-                    'personal data processing',
-                    'user consent',
-                    'data transfers',
-                    'profiling',
-                    'automated decision-making'
-                ],
-                'penalties': 'Up to 4% of global annual turnover',
-                'effective_date': '2018-05-25'
+                'penalties': 'Up to 6% of global annual turnover',
+                'effective_date': '2024-02-17'
             }
-        ]
+    
+    def _load_regulation_data(self) -> List[Dict]:
+        """Load regulation data (focused on hackathon scope)"""
         
+        regulations = []
+        # Try live fetch for EU DSA
+        regulations.append(self.fetch_dsa_from_eurlex())
+        
+        regulations.extend([
+        {
+            'id': 'ca_kids_addiction_2024',
+            'name': 'California Protecting Our Kids from Social Media Addiction Act',
+            'jurisdiction': 'California, US',
+            'description': 'California state law targeting addictive design features in social media that affect minors.',
+            'key_obligations': [
+                'Ban use of addictive design features for minors',
+                'Age verification for users',
+                'Default high-privacy settings for minors',
+                'Provide parental controls for minor accounts'
+            ],
+            'scope': [
+                'minors protection',
+                'addictive features',
+                'age verification',
+                'parental controls',
+                'privacy by default'
+            ],
+            'penalties': 'Civil penalties and potential damages per affected child',
+            'effective_date': '2024-07-01'
+        },
+        {
+            'id': 'fl_online_protections_2024',
+            'name': 'Florida Online Protections for Minors Act',
+            'jurisdiction': 'Florida, US',
+            'description': 'Law requiring social media platforms to restrict harmful content and addictive features for minors in Florida.',
+            'key_obligations': [
+                'Ban accounts for users under 14',
+                'Require parental consent for users under 16',
+                'Restrict addictive design features for minors',
+                'Provide parental access controls'
+            ],
+            'scope': [
+                'age restrictions',
+                'parental consent',
+                'addictive design',
+                'minor account restrictions'
+            ],
+            'penalties': 'Civil penalties per violation; private right of action',
+            'effective_date': '2024-07-01'
+        },
+        {
+            'id': 'ut_social_media_2023',
+            'name': 'Utah Social Media Regulation Act',
+            'jurisdiction': 'Utah, US',
+            'description': 'Utah law requiring strict parental oversight, age verification, and time restrictions for minors using social media.',
+            'key_obligations': [
+                'Mandatory age verification for all users',
+                'Parental consent for minor accounts',
+                'Nighttime curfew for minors (10pm-6am)',
+                'Prohibit certain addictive features for minors',
+                'Provide parents with account access'
+            ],
+            'scope': [
+                'age verification',
+                'parental oversight',
+                'curfew enforcement',
+                'addictive design features',
+                'minor protection'
+            ],
+            'penalties': 'Civil penalties up to $5,000 per violation',
+            'effective_date': '2024-03-01'
+        },
+        {
+            'id': 'us_ncmec_reporting',
+            'name': 'US Law - Reporting Child Sexual Abuse Content to NCMEC',
+            'jurisdiction': 'United States',
+            'description': 'Federal requirement for electronic service providers to report child sexual abuse material (CSAM) to the National Center for Missing and Exploited Children (NCMEC).',
+            'key_obligations': [
+                'Report known CSAM to NCMEC immediately',
+                'Preserve reported content for law enforcement',
+                'Provide technical assistance during investigations',
+                'Maintain procedures to detect and report CSAM'
+            ],
+            'scope': [
+                'child safety',
+                'content scanning',
+                'law enforcement reporting',
+                'CSAM detection',
+                'content preservation'
+            ],
+            'penalties': 'Criminal penalties and civil liability for non-compliance',
+            'effective_date': '1998-10-30'
+        }
+        ])
         return regulations
+
     
     def _build_search_index(self):
         """Build TF-IDF search index for regulations"""
