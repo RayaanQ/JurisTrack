@@ -26,7 +26,7 @@ An intelligent system that analyzes social platform features for geo-specific re
 * **Explainable AI** – Each decision is linked to explicit text snippets or regulation clauses
 * **TF-IDF Regulation Search** – Fast semantic matching against 5 major regulations:
 
-  * EU DSA
+  * EU DSA - Added API to the Doc, to fetch data directly from the regulation document.
   * CCPA
   * Utah Social Media Act
   * Florida Law
@@ -113,7 +113,8 @@ geo-regulation-compliance/
 │   └── src/
 │       ├── index.js
 │       ├── index.css
-│       └── App.js (rename your App.jsx)
+│       ├── App.js     
+|       └──ComplianceDashboard.js
 └── Setup:
     └── setup_windows.bat
 ```
