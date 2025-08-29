@@ -165,7 +165,7 @@ const ComplianceDashboard = () => {
     );
   }
 
-  const COLORS = ['#10B981', '#F59E0B', '#EF4444'];
+  const COLORS = ['#EF4444','#F59E0B', '#10B981' ];
   const riskData = dashboardData ? Object.entries(dashboardData.risk_distribution).map(([key, value]) => ({
     name: key,
     value: value
@@ -320,7 +320,7 @@ const ComplianceDashboard = () => {
             </div>
           </div>
 
-          {/* Recent Analyses */}
+          {/* Recent Analysis */}
           <div className="bg-gray-800 p-6 rounded-xl border border-gray-700">
             <h3 className="text-xl font-semibold mb-4">Recent Analysis</h3>
             <div className="overflow-x-auto">
@@ -560,10 +560,10 @@ const ComplianceDashboard = () => {
       <div className="bg-gray-800 border-t border-gray-700 px-6 py-4 mt-8">
         <div className="flex items-center justify-between text-sm text-gray-400">
           <div>
-            Geo-Regulation Compliance System v1.0 | Built with React + FastAPI + OpenAI
+            Geo-Regulation Compliance System | Built with React + FastAPI + OpenAI
           </div>
           <div>
-            Hackathon Prototype - From Guesswork to Governance
+            Hackathon - From Guesswork to Governance
           </div>
         </div>
       </div>

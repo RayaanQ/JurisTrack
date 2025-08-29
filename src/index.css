@@ -22,7 +22,7 @@ code {
   box-sizing: border-box;
 }
 
-/* Custom scrollbar */
+
 ::-webkit-scrollbar {
   width: 8px;
 }

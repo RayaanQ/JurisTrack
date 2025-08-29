@@ -13,20 +13,19 @@ import uuid
 import logging
 from pathlib import Path
 
-# Import our custom modules
+#here we imported our modules that we created
 from compliance_analyzer import ComplianceAnalyzer
 from regulation_kb import RegulationKnowledgeBase
 from jargon_resolver import JargonResolver
 
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
-# Setup logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 app = FastAPI(title="Geo-Regulation Compliance API", version="1.0.0")
 
-# CORS setup
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -128,16 +127,15 @@ async def health_check():
 async def test_gemini():
     """Test if Gemini API key is working"""
     try:
-        # Minimal prompt
+
         prompt = "Say hello in a single sentence."
 
-        # Call Gemini directly
         model = genai.GenerativeModel("gemini-2.5-flash")
         response = model.generate_content(prompt)
 
         return {
             "status": "success",
-            "response": response.text  # Gemini's content is here
+            "response": response.text
         }
 
     except Exception as e:
@@ -276,7 +274,7 @@ async def get_dashboard_data():
             all_regions.extend(regions)
         region_distribution = pd.Series(all_regions).value_counts().head(10).to_dict()
         
-        # Recent analyses
+        # Recent analysis
         recent_analyses = df.head(10).to_dict('records')
         
         conn.close()

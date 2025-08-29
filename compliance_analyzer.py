@@ -22,7 +22,7 @@ class ComplianceAnalyzer:
         gemini_api_key = os.getenv("GEMINI_API_KEY", "dummy-key")
         if gemini_api_key != "dummy-key":
             genai.configure(api_key=gemini_api_key)
-            self.client = genai.GenerativeModel("gemini-2.5-flash")  # or gemini-pro if you prefer
+            self.client = genai.GenerativeModel("gemini-2.5-flash") 
         else:
             self.client = None
         
@@ -117,9 +117,17 @@ class ComplianceAnalyzer:
         try:
             # Prepare context
             reg_context = "\n".join([
-                f"- {reg['name']} ({reg['jurisdiction']}): {reg['description'][:200]}..."
+                f"- Name: {reg['name']}\n"
+                f"  Jurisdiction: {reg['jurisdiction']}\n"
+                f"  Description: {reg['description']}\n"
+                f"  Obligations: {', '.join(reg['key_obligations'])}\n"
+                f"  Scope: {', '.join(reg['scope'])}"
                 for reg in relevant_regulations[:3]
             ])
+            
+            allowed_jurisdictions = [reg['jurisdiction'] for reg in relevant_regulations]
+            allowed_jurisdictions_str = ", ".join(allowed_jurisdictions)
+
             
             prompt = f"""
             You are a legal compliance expert analyzing whether a software feature requires geo-specific regulatory compliance.
@@ -134,7 +142,7 @@ class ComplianceAnalyzer:
             1. Does it require geo-specific compliance logic? (Yes/No)
             2. Why? (2-3 sentences)
             3. Which specific regulatory obligations might apply?
-            4. What regions are most likely affected?**Only select from the following jurisdictions: {relevant_regulations}**
+            4. What regions are most likely affected?**Only select from the following jurisdictions: {allowed_jurisdictions_str}**
 
             Respond in JSON format:
             {{
@@ -284,8 +292,12 @@ class ComplianceAnalyzer:
         
         # Matched regulations
         if regulations:
-            reg_names = [reg['name'] for reg in regulations[:2]]
-            evidence_parts.append(f"Matched regulations: {', '.join(reg_names)}")
+            reg_matches = []
+            for reg in regulations[:3]:
+                matched_keywords = [k for k in self.risk_keywords.keys() 
+                    if any(kw in text.lower() for kw in self.risk_keywords[k])]
+                reg_matches.append(f"{reg['name']} (matched keywords: {', '.join(matched_keywords)})")
+            evidence_parts.append(f"Matched regulations: {', '.join(reg_matches)}")
         
         # LLM confidence
         if 'confidence' in llm_analysis:
