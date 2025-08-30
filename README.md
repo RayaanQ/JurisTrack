@@ -1,6 +1,6 @@
 # JurisTrack – Geo-Regulation Compliance Radar
 
-An intelligent system that analyzes social platform features for geo-specific regulatory compliance. **JurisTrack** automatically detects compliance risks, resolves platform-specific jargon, and provides audit-ready reports via a real-time dashboard.
+An intelligent system that analyzes social platform features for geo-specific regulatory compliance. **JurisTrack** automatically detects compliance risks, resolves platform-specific jargon, and provides audit-ready reports via a real-time dashboard. We are solving the problem by boosting the precision of the LLM.
 
 ---
 

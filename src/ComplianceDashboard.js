@@ -165,7 +165,7 @@ const ComplianceDashboard = () => {
     );
   }
 
-  const COLORS = ['#EF4444','#F59E0B', '#10B981' ];
+  const COLORS = ['#EF4444', '#10B981','#F59E0B' ];
   const riskData = dashboardData ? Object.entries(dashboardData.risk_distribution).map(([key, value]) => ({
     name: key,
     value: value
@@ -183,7 +183,7 @@ const ComplianceDashboard = () => {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
-              Geo-Regulation Compliance Radar
+              JurisTrack: Geo-Regulation Compliance Radar
             </h1>
             <p className="text-gray-400 mt-1">Automated feature compliance analysis with LLMs</p>
             {error && (
